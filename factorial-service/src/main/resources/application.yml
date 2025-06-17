@@ -1,0 +1,41 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: factorial-service
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: 5672
+    username: guest
+    password: guest
+
+grpc:
+  server:
+    port: 9090
+
+# gRPC client configuration
+factorial:
+  grpc:
+    host: ${FACTORIAL_GRPC_HOST:localhost}
+    port: ${FACTORIAL_GRPC_PORT:9090}
+
+fibonacci:
+  grpc:
+    host: ${FIBONACCI_GRPC_HOST:localhost}
+    port: ${FIBONACCI_GRPC_PORT:9090}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.example.factorial: INFO
+    org.springframework.amqp: INFO
+    io.grpc: INFO
