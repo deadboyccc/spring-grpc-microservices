@@ -5,8 +5,8 @@ FROM maven:3.9.5-eclipse-temurin-17-alpine AS build
 COPY proto/ /proto/
 
 # Copy pom.xml and source code
-COPY pom.xml .
-COPY src/ ./src/
+COPY fibonacci-service/pom.xml .
+COPY fibonacci-service/src/ ./src/
 
 # Build the application
 RUN mvn clean package -DskipTests
