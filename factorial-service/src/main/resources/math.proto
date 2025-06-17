@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package math;
+
+service FactorialService {
+  rpc Calculate (MathRequest) returns (MathResponse);
+}
+
+service FibonacciService {
+  rpc Calculate (MathRequest) returns (MathResponse);
+}
+
+message MathRequest {
+  int32 number = 1;
+}
+
+message MathResponse {
+  int64 result = 1;
+  repeated int64 accumulatedResults = 2;
+} 

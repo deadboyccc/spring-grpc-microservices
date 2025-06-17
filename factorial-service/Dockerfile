@@ -1,15 +1,30 @@
 # Multi-stage build for better efficiency
 FROM maven:3.9.5-eclipse-temurin-17-alpine AS build
 
-# Copy proto files first for better caching
-COPY proto/ /proto/
+# Add Maven settings for better network reliability
+RUN echo '<?xml version="1.0" encoding="UTF-8"?>' > /usr/share/maven/ref/settings.xml && \
+  echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"' >> /usr/share/maven/ref/settings.xml && \
+  echo '          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' >> /usr/share/maven/ref/settings.xml && \
+  echo '          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0' >> /usr/share/maven/ref/settings.xml && \
+  echo '                          https://maven.apache.org/xsd/settings-1.0.0.xsd">' >> /usr/share/maven/ref/settings.xml && \
+  echo '  <mirrors>' >> /usr/share/maven/ref/settings.xml && \
+  echo '    <mirror>' >> /usr/share/maven/ref/settings.xml && \
+  echo '      <id>central-mirror</id>' >> /usr/share/maven/ref/settings.xml && \
+  echo '      <name>Central Repository Mirror</name>' >> /usr/share/maven/ref/settings.xml && \
+  echo '      <url>https://repo1.maven.org/maven2</url>' >> /usr/share/maven/ref/settings.xml && \
+  echo '      <mirrorOf>central</mirrorOf>' >> /usr/share/maven/ref/settings.xml && \
+  echo '    </mirror>' >> /usr/share/maven/ref/settings.xml && \
+  echo '  </mirrors>' >> /usr/share/maven/ref/settings.xml && \
+  echo '</settings>' >> /usr/share/maven/ref/settings.xml
 
 # Copy pom.xml and source code
 COPY factorial-service/pom.xml .
 COPY factorial-service/src/ ./src/
 
-# Build the application
-RUN mvn clean package -DskipTests
+# Build the application with retry logic for network issues
+RUN mvn clean package -DskipTests --settings /usr/share/maven/ref/settings.xml || \
+  (sleep 10 && mvn clean package -DskipTests --settings /usr/share/maven/ref/settings.xml) || \
+  (sleep 20 && mvn clean package -DskipTests --settings /usr/share/maven/ref/settings.xml)
 
 # Runtime stage
 FROM eclipse-temurin:17-jre-alpine

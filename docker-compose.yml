@@ -25,7 +25,7 @@ services:
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
       - FIBONACCI_GRPC_HOST=fibonacci-service
-      - FIBONACCI_GRPC_PORT=9090
+      - FIBONACCI_GRPC_PORT=9091
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -43,7 +43,7 @@ services:
       context: .
       dockerfile: fibonacci-service/Dockerfile
     ports:
-      - "9091:9090" # gRPC
+      - "9091:9091" # gRPC
       - "8081:8080" # Actuator/HTTP
     environment:
       - SPRING_RABBITMQ_HOST=rabbitmq
