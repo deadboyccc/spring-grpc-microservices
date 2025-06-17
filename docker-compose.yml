@@ -1,0 +1,67 @@
+version: '3.8'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - microservices-network
+
+  factorial-service:
+    build: 
+      context: ./factorial-service
+      dockerfile: Dockerfile
+    ports:
+      - "9090:9090" # gRPC
+      - "8080:8080" # Actuator/HTTP
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - FIBONACCI_GRPC_HOST=fibonacci-service
+      - FIBONACCI_GRPC_PORT=9090
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  fibonacci-service:
+    build: 
+      context: ./fibonacci-service
+      dockerfile: Dockerfile
+    ports:
+      - "9091:9090" # gRPC
+      - "8081:8080" # Actuator/HTTP
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - FACTORIAL_GRPC_HOST=factorial-service
+      - FACTORIAL_GRPC_PORT=9090
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+networks:
+  microservices-network:
+    driver: bridge 
