@@ -1,5 +1,8 @@
 # gRPC + RabbitMQ Microservices Demo
 
+> 🎵 **Vibe Coded Disclaimer:** This entire project was vibe coded with Cursor! ✨  
+> *When the coding vibes are right, magic happens. This demo is the result of pure vibes and some serious microservices energy.* 🚀
+
 A **complete, production-ready learning demo** that demonstrates modern microservices architecture using **gRPC** for inter-service communication and **RabbitMQ** for asynchronous messaging.
 
 ## 🎯 What This Demo Teaches
