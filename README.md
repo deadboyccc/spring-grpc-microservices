@@ -1,7 +1,12 @@
-# gRPC + RabbitMQ Microservices Demo
+> 🎵 **Vibe Coded Disclaimer:** This entire project was vibe coded with Cursor! ✨
+>
+> When the coding vibes are right, magic happens. This demo is the result of pure vibes and some serious microservices energy. 🚀
+>
+> This is a **test repository** to see if AI, specifically large language models, can build a small microservices project and make it runnable via Docker Compose. As of now, it hasn't quite cracked it, proving that AI still has a long way to go before it can replace human developers (I might regret this statement later). Hehehe.
 
-> 🎵 **Vibe Coded Disclaimer:** This entire project was vibe coded with Cursor! ✨  
-> *When the coding vibes are right, magic happens. This demo is the result of pure vibes and some serious microservices energy.* 🚀
+---
+
+# gRPC + RabbitMQ Microservices Demo
 
 A **complete, production-ready learning demo** that demonstrates modern microservices architecture using **gRPC** for inter-service communication and **RabbitMQ** for asynchronous messaging.
 
